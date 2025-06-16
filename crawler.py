@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/env python3
 
 import argparse
@@ -129,8 +127,8 @@ def main():
     todo_urls = filter(lambda url : not extract_domain(url) in done_domains, urls)
 
     # WARNING this destorys the list...
-    # print(len(list(todo_urls)), "todo, out of: ", len(urls))
-
+    # print(list(todo_urls), "todo, out of: ", len(urls))
+    
     for url in tqdm(todo_urls):
         try:
             print("nDownloading ", url)
