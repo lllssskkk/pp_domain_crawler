@@ -112,10 +112,6 @@ def main():
         '--headless', action='store_true', help="Run in headless"
     )
     args = cli.parse_args()
-    urls = []
-    with open(args.filepath, "r") as f:
-        urls = [line.strip() for line in f.readlines()]
-
     output_folder = args.o
     url = args.domain
 
