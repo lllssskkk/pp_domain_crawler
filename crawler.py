@@ -8,7 +8,7 @@ from seleniumwire import webdriver
 from seleniumwire.utils import decode
 from urllib.parse import urlparse, urlsplit
 from tqdm import tqdm
-
+import sys
 # Might neeed:  (https://github.com/seleniumbase/SeleniumBase/issues/2782)
 # pip install blinker==1.7.0
 
@@ -102,7 +102,7 @@ def main():
         description="Download JavaScript source code from one or more websites"
     )
     cli.add_argument(
-        "filepath", help="Path to file containing URLS separated by newlines"
+        "domain", help="Domain we aim to crawl"
     )
     cli.add_argument(
         "-o", help="Output folder for downloaded JavaScript", type=str, default="newdata/"
@@ -111,32 +111,22 @@ def main():
     cli.add_argument(
         '--headless', action='store_true', help="Run in headless"
     )
-
-
     args = cli.parse_args()
     urls = []
     with open(args.filepath, "r") as f:
         urls = [line.strip() for line in f.readlines()]
 
     output_folder = args.o
+    url = args.domain
 
-    # Skip already done domains
-    # TODO, more general for multiple URLs per domain?
-    # XXX, not a great check for "done", e.g. if it crashes mid scan, because the domain folder is created right away.
-    done_domains = set(os.listdir(output_folder))
-    todo_urls = filter(lambda url : not extract_domain(url) in done_domains, urls)
-
-    # WARNING this destorys the list...
-    # print(list(todo_urls), "todo, out of: ", len(urls))
-    
-    for url in tqdm(todo_urls):
-        try:
+    try:
             print("nDownloading ", url)
             download_site(url, output_folder, args.headless)
-        except Exception as e:
+            sys.exit(0)
+    except Exception as e:
             print("Failed ", e, url)
             open("errors.txt", "a+").write("Failed on " + url + "\n" + str(e) + "\n\n")
-    
+            sys.exit(1)
         # input("NEXT?")
     
 
