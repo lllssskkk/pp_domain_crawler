@@ -2,7 +2,7 @@
   description = "Reproducible JS-crawler with Selenium-Wire (fixed)";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -21,7 +21,6 @@
           config.allowUnfree = true; # remove if you don't need google-chrome
         };
 
-      
         # ── 1. optional package overrides ──────────────────────────────────
         pyOverrides = final: prev: {
           # Example – only keep if nixpkgs still ships 5.0.x:
@@ -113,7 +112,7 @@
         # ── 4. wrapper for nix run / nix build ────────────────────────────
         runScript = pkgs.writeShellApplication {
           name = "crawler";
-          runtimeInputs = [ pythonEnv ] ++ browserPkgs ;
+          runtimeInputs = [ pythonEnv ] ++ browserPkgs;
           text = ''
             export PATH=${pkgs.chromedriver}/bin:$PATH
             exec ${pythonEnv.interpreter} ${self}/crawler.py "$@"
