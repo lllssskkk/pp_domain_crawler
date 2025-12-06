@@ -95,7 +95,7 @@
 
         # ── 2. browser & driver ────────────────────────────────────────────
         browserPkgs = [
-          pkgs.google-chrome
+          pkgs.chromium
           pkgs.chromedriver
         ];
         # If you prefer FOSS chromium:
@@ -115,6 +115,7 @@
           runtimeInputs = [ pythonEnv ] ++ browserPkgs;
           text = ''
             export PATH=${pkgs.chromedriver}/bin:$PATH
+            export PATH=${pkgs.chromium}/bin:$PATH
             exec ${pythonEnv.interpreter} ${self}/crawler.py "$@"
           '';
         };
